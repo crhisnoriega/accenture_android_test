@@ -4,6 +4,7 @@ import android.os.Bundle
 import com.imdb.core.base.BaseActivity
 import com.imdb.feature.listing.R
 import com.imdb.feature.listing.di.HomeModule
+import com.imdb.feature.listing.presentation.fragments.MovieDetailsFragment
 import com.imdb.feature.listing.presentation.fragments.MovieListFragment
 import org.koin.core.module.Module
 
@@ -20,6 +21,13 @@ class HomeActivity : BaseActivity() {
     private fun configureInitialFragment() {
         supportFragmentManager.beginTransaction()
             .replace(R.id.container, MovieListFragment.newInstance())
+            .commit()
+    }
+
+    fun showDetailMovie(titleId: String) {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.container, MovieDetailsFragment.newInstance(titleId))
+            .addToBackStack("details")
             .commit()
     }
 }

@@ -1,11 +1,12 @@
 package com.imdb.feature.listing.presentation.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.imdb.core.base.BaseViewModel
+import com.imdb.core.data.ViewState
 import com.imdb.designsystem.list.model.ItemListModel
+import com.imdb.feature.listing.data.model.MovieListResponse
 import com.imdb.feature.listing.domain.MovieListUseCase
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
@@ -17,17 +18,28 @@ class MovieListViewModel(private val movieListUseCase: MovieListUseCase) : BaseV
 
     fun fetchMovies() {
         viewModelScope.launch {
-            movieListUseCase.fetchMovies().catch {
-                Log.i("log", it.message, it)
+            movieListUseCase.resultFlow.catch {
             }.collect {
-                _movies.value = it.items?.map { movie ->
-                    ItemListModel(
-                        title = movie.title ?: "",
-                        description = movie.fullTitle ?: "",
-                        imageUrl = movie.imageUrl ?: ""
-                    )
+                when (it) {
+                    is ViewState.Success<*> -> {
+                        val list = it.data as MovieListResponse
+                        _movies.value = list.items?.map {
+                            ItemListModel(
+                                id = it.id ?: "",
+                                title = it.title ?: "",
+                                description = it.fullTitle ?: "",
+                                imageUrl = it.imageUrl ?: ""
+                            )
+                        }
+                    }
+
+                    is ViewState.Error -> {
+                        it.error
+                    }
                 }
             }
+
+            movieListUseCase.launch(Unit)
         }
     }
 

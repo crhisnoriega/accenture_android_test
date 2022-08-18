@@ -1,5 +1,4 @@
-package br.com.android.challenge.data
-
+package com.imdb.movies.data
 
 sealed class Resources {
     object Loading : Resources()

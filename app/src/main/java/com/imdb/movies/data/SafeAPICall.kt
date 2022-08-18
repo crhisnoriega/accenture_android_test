@@ -1,6 +1,6 @@
 package com.imdb.movies.data
 
-import br.com.android.challenge.data.Resources
+import com.imdb.core.data.Resources
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
