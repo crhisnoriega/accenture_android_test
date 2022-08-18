@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">IMdb</string>
+    <string name="title_activity_splash">SplashActivity</string>
+</resources>
